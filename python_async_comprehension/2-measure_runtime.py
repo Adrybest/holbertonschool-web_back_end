@@ -10,7 +10,8 @@ async_com = __import__('1-async_comprehension').async_comprehension
 
 
 async def measure_runtime():
+    """Notice that the total runtime is roughly 10 seconds"""
     start_time = time.perf_counter()
-    await asyncio.gather(*(async_com() for _ in range(4)))
+    await asyncio.gather(*(async_com() for a in range(4)))
     end_time = time.perf_counter()
     return end_time - start_time
