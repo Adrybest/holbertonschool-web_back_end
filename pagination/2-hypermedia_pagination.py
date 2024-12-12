@@ -7,7 +7,8 @@ from typing import List, Dict, Any
 
 
 def index_range(page: int, page_size: int) -> tuple:
-    """Return a tuple containing the start and end index for a given page and page_size."""
+    """Return a tuple containing the start and end
+    index for a given page and page_size."""
     start_index = (page - 1) * page_size
     end_index = start_index + page_size
     return start_index, end_index
@@ -32,13 +33,13 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Get a page of the dataset."""
-        assert isinstance(page, int) and page > 0, "page must be a positive integer"
-        assert isinstance(page_size, int) and page_size > 0, "page_size must be a positive integer"
-
+        assert isinstance(page, int) and page > 0
+        assert isinstance(page_size, int) and page_size > 0
         start_index, end_index = index_range(page, page_size)
         dataset = self.dataset()
-
-        return dataset[start_index:end_index] if start_index < len(dataset) else []
+        if start_index >= len(dataset):
+            return []
+        return dataset[start_index:end_index]
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict[str, Any]:
         """Get a page of the dataset with hypermedia pagination details."""
