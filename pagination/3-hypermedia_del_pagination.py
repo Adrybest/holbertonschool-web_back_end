@@ -39,24 +39,25 @@ class Server:
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """Get a page of the dataset ensuring deletion resilience."""
-        assert isinstance(index, int) and index >= 0, "index must be a non-negative integer"
-        assert isinstance(page_size, int) and page_size > 0, "page_size must be a positive integer"
+        assert isinstance(index, int) and 0 <= index < len(self.dataset())
 
-        indexed_data = self.indexed_dataset()
-        assert index < len(indexed_data), "index out of range"
-
+        indexed_dataset = self.indexed_dataset()
         data = []
-        next_index = index
-        for _ in range(page_size):
-            while next_index not in indexed_data and next_index < len(indexed_data):
-                next_index += 1
-            if next_index < len(indexed_data):
-                data.append(indexed_data[next_index])
-                next_index += 1
+        current_index = index
+        modif_size = page_size
+
+        while modif_size > 0 and current_index < len(self.dataset()):
+            if current_index in indexed_dataset:
+                data.append(indexed_dataset[current_index])
+                modif_size -= 1
+            current_index += 1
+
+        next_index = current_index if current_index < len(
+            self.dataset()) else None
 
         return {
             "index": index,
             "data": data,
             "page_size": len(data),
-            "next_index": next_index if next_index < len(indexed_data) else None
+            "next_index": next_index
         }
