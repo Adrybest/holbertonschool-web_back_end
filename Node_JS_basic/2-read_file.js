@@ -22,13 +22,16 @@ function countStudents(path) {
       }
       studentsByField[field].push(firstname);
     });
+
     const totalStudents = Object.values(studentsByField)
       .reduce((acc, curr) => acc + curr.length, 0);
     console.log(`Number of students: ${totalStudents}`);
 
     for (const field in studentsByField) {
-      const studentList = studentsByField[field].join(', ');
-      console.log(`Number of students in ${field}: ${studentsByField[field].length}. List: ${studentList}`);
+      if (Object.prototype.hasOwnProperty.call(studentsByField, field)) {
+        const studentList = studentsByField[field].join(', ');
+        console.log(`Number of students in ${field}: ${studentsByField[field].length}. List: ${studentList}`);
+      }
     }
   } catch (err) {
     throw new Error('Cannot load the database');
