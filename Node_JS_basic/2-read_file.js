@@ -4,7 +4,6 @@ function countStudents(path) {
   try {
     const data = fs.readFileSync(path, 'utf8');
     const lines = data.split('\n').filter((line) => line.trim() !== '');
-    const header = lines.shift();
     if (lines.length === 0) {
       throw new Error('No valid students found in the database.');
     }
@@ -31,7 +30,6 @@ function countStudents(path) {
       const studentList = studentsByField[field].join(', ');
       console.log(`Number of students in ${field}: ${studentsByField[field].length}. List: ${studentList}`);
     }
-
   } catch (err) {
     throw new Error('Cannot load the database');
   }
